@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>英文单词学习器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+    #word {
+      font-size: 36px;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 20px;
+    }
+    #meaning {
+      font-size: 24px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .btn-next {
+      background-color: #007BFF;
+      color: white;
+    }
+    .btn-meaning {
+      background-color: #28a745;
+      color: white;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    @media (max-width: 600px) {
+      #word {
+        font-size: 28px;
+      }
+      #meaning {
+        font-size: 20px;
+      }
+      button {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 单词展示区域 -->
+  <div id="word">点击“下一个单词”开始</div>
+  <div id="meaning"></div>
+  <button class="btn-next" onclick="showNextWord()">下一个单词</button>
+  <button class="btn-meaning" onclick="showMeaning()">显示释义</button>
+
+  <script>
+    // 整合的单词库
+    const words = [
+      { "word": "show", "meaning": "表演；展示" },
+      { "word": "outside", "meaning": "外面" },
+      { "word": "weekday", "meaning": "工作日" },
+      { "word": "weekend", "meaning": "周末" },
+      { "word": "community", "meaning": "社区；团体" },
+      { "word": "gift", "meaning": "礼物" },
+      { "word": "stranger", "meaning": "陌生人" },
+      { "word": "world", "meaning": "世界" },
+      { "word": "problem", "meaning": "问题" },
+      { "word": "language", "meaning": "语言" },
+      { "word": "voice", "meaning": "声音" },
+      { "word": "grammar", "meaning": "语法" },
+      { "word": "vocabulary", "meaning": "词汇" },
+      { "word": "French", "meaning": "法语" },
+      { "word": "station", "meaning": "站台" },
+      { "word": "answer", "meaning": "回答" },
+      { "word": "shout", "meaning": "喊" },
+      { "word": "title", "meaning": "题目" },
+      { "word": "feeling", "meaning": "感受" },
+      { "word": "mood", "meaning": "心情" },
+      { "word": "nature", "meaning": "自然" },
+      { "word": "joy", "meaning": "快乐" },
+      { "word": "success", "meaning": "成功" },
+      { "word": "culture", "meaning": "文化" },
+      { "word": "health", "meaning": "健康" },
+      { "word": "science", "meaning": "科学" },
+      { "word": "travel", "meaning": "旅行" },
+      { "word": "company", "meaning": "公司" },
+      { "word": "worker", "meaning": "工作人员" },
+      { "word": "doctor", "meaning": "医生" },
+      { "word": "know", "meaning": "知道" },
+      { "word": "wish", "meaning": "希望" },
+      { "word": "born", "meaning": "出生" },
+      { "word": "die", "meaning": "死亡" },
+      { "word": "buy", "meaning": "买（过去式：bought）" },
+      { "word": "pay", "meaning": "支付（过去式：paid）" },
+      { "word": "spend", "meaning": "花费" },
+      { "word": "receive", "meaning": "收到" },
+      { "word": "learn", "meaning": "学习" },
+      { "word": "pronounce", "meaning": "发音" },
+      { "word": "cause", "meaning": "造成" },
+      { "word": "trouble", "meaning": "麻烦" },
+      { "word": "decide", "meaning": "决定" },
+      { "word": "invite", "meaning": "邀请" },
+      { "word": "realize", "meaning": "明白" },
+      { "word": "clean", "meaning": "清洁，打扫" },
+      { "word": "find", "meaning": "找到（过去式：found）" },
+      { "word": "write", "meaning": "写" },
+      { "word": "think", "meaning": "思考（过去式：thought）" },
+      { "word": "suggest", "meaning": "建议" },
+      { "word": "improve", "meaning": "改善" },
+      { "word": "plant", "meaning": "种植/植物" },
+      { "word": "work hard", "meaning": "努力工作" },
+      { "word": "important", "meaning": "重要的" },
+      { "word": "lonely", "meaning": "孤单的" },
+      { "word": "poor", "meaning": "贫穷的" },
+      { "word": "shy", "meaning": "害羞的" },
+      { "word": "foreign", "meaning": "外国的" },
+      { "word": "strange", "meaning": "奇怪的" },
+      { "word": "correct", "meaning": "正确的" },
+      { "word": "wrong", "meaning": "错误的" },
+      { "word": "quiet", "meaning": "安静的" },
+      { "word": "loudly", "meaning": "大声地" },
+      { "word": "young", "meaning": "年轻的" },
+      { "word": "difficult", "meaning": "困难的" },
+      { "word": "lazy", "meaning": "懒惰的" },
+      { "word": "nervous", "meaning": "焦虑的" },
+      { "word": "tired", "meaning": "累的" },
+      { "word": "calm", "meaning": "冷静" },
+      { "word": "bored", "meaning": "无聊的" },
+      { "word": "excited", "meaning": "激动的" },
+      { "word": "sad", "meaning": "伤心" },
+      { "word": "angry", "meaning": "生气的" },
+      { "word": "relaxing", "meaning": "放松的" },
+      { "word": "possible", "meaning": "可能的" },
+      { "word": "similar", "meaning": "相似的" },
+      { "word": "another", "meaning": "另一种" },
+      { "word": "healthy", "meaning": "健康的" },
+      { "word": "in a mess", "meaning": "一团乱" },
+      { "word": "quite", "meaning": "相当" },
+      { "word": "always", "meaning": "总是" },
+      { "word": "at first", "meaning": "最初，起先" },
+      { "word": "to one's surprise", "meaning": "出乎某人的意料" },
+      { "word": "color", "meaning": "颜色" },
+      { "word": "kind", "meaning": "类型" },
+      { "word": "relax", "meaning": "放松" },
+      { "word": "paint", "meaning": "涂色" },
+      { "word": "affect", "meaning": "影响" },
+      { "word": "energy", "meaning": "能量" },
+      { "word": "goal", "meaning": "目标" },
+      { "word": "sign", "meaning": "标志" },
+      { "word": "month", "meaning": "月份" },
+      { "word": "nothing", "meaning": "没有什么" },
+      { "word": "else", "meaning": "其他的" },
+      { "word": "both", "meaning": "两者都" },
+      { "word": "last year", "meaning": "去年" },
+      { "word": "ago", "meaning": "以前（long long ago 很久以前）" }
+    ];
+
+    let usedWords = [];
+    let currentWord = null;
+
+    function getRandomWord() {
+      if (usedWords.length === words.length) {
+        usedWords = []; // 所有单词用完后重置
+      }
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * words.length);
+      } while (usedWords.includes(randomIndex));
+      usedWords.push(randomIndex);
+      return words[randomIndex];
+    }
+
+    function showNextWord() {
+      currentWord = getRandomWord();
+      document.getElementById("word").textContent = currentWord.word;
+      document.getElementById("meaning").textContent = "";
+    }
+
+    function showMeaning() {
+      if (currentWord) {
+        document.getElementById("meaning").textContent = currentWord.meaning;
+      }
+    }
+
+    // 点击英文单词也显示中文意思
+    document.getElementById("word").addEventListener("click", showMeaning);
+
+    // 初始化第一个单词
+    showNextWord();
+  </script>
+
+</body>
+</html>
